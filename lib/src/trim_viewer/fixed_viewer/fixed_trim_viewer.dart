@@ -184,6 +184,7 @@ class _FixedTrimViewerState extends State<FixedTrimViewer>
   @override
   void initState() {
     super.initState();
+    widget.trimmer.onReset = reset;
     _startCircleSize = widget.editorProperties.circleSize;
     _endCircleSize = widget.editorProperties.circleSize;
     _borderRadius = widget.editorProperties.borderRadius;
@@ -301,6 +302,42 @@ class _FixedTrimViewerState extends State<FixedTrimViewer>
     }
   }
 
+  void reset() {
+    videoPlayerController.seekTo(const Duration(milliseconds: 0));
+    setState(() {
+      _startCircleSize = widget.editorProperties.circleSize;
+      _endCircleSize = widget.editorProperties.circleSize;
+
+      _startPos = const Offset(0, 0);
+      _endPos = Offset(
+        maxLengthPixels != null ? maxLengthPixels! : _thumbnailViewerW,
+        _thumbnailViewerH,
+      );
+
+      _startFraction = 0;
+      _endFraction = 1;
+
+      _videoStartPos = _videoStartPos;
+      _videoEndPos = fraction != null
+          ? _videoDuration.toDouble() * fraction!
+          : _videoDuration.toDouble();
+
+      widget.onChangeStart!(0);
+      widget.onChangeEnd!(_videoEndPos);
+
+      // Defining the tween points
+      _linearTween
+        ..begin = _startPos.dx
+        ..end = _endPos.dx;
+      _animationController!.duration =
+          Duration(milliseconds: (_videoEndPos - _videoStartPos).toInt());
+      _animationController!.reset();
+
+      videoPlayerController
+          .seekTo(Duration(milliseconds: _videoStartPos.toInt()));
+    });
+  }
+
   /// Called when the user starts dragging the frame, on either side on the whole frame.
   /// Determine which [EditorDragType] is used.
   void _onDragStart(DragStartDetails details) {
@@ -408,6 +445,7 @@ class _FixedTrimViewerState extends State<FixedTrimViewer>
 
   @override
   void dispose() {
+    widget.trimmer.onReset = null;
     videoPlayerController.pause();
     widget.onChangePlaybackState!(false);
     if (_videoFile != null) {
