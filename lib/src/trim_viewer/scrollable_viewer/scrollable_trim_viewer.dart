@@ -6,8 +6,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:video_player/video_player.dart';
-import 'package:video_trimmer/src/trim_viewer/trim_editor_painter.dart';
 import 'package:video_trimmer/src/trim_viewer/trim_area_properties.dart';
+import 'package:video_trimmer/src/trim_viewer/trim_editor_painter.dart';
 import 'package:video_trimmer/src/trim_viewer/trim_editor_properties.dart';
 import 'package:video_trimmer/src/trimmer.dart';
 import 'package:video_trimmer/src/utils/duration_style.dart';
@@ -282,6 +282,7 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
   @override
   void initState() {
     super.initState();
+    widget.trimmer.onReset = reset;
     _scrollController = ScrollController();
     _startCircleSize = widget.editorProperties.circleSize;
     _endCircleSize = widget.editorProperties.circleSize;
@@ -429,6 +430,45 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
     _videoDuration = videoPlayerController.value.duration.inMilliseconds;
   }
 
+  void reset() {
+    videoPlayerController.seekTo(const Duration(milliseconds: 0));
+    setState(() {
+      _scrollStartTimer?.cancel();
+      _scrollingTimer?.cancel();
+
+      _startCircleSize = widget.editorProperties.circleSize;
+      _endCircleSize = widget.editorProperties.circleSize;
+
+      _startPos = const Offset(0, 0);
+      _endPos = Offset(
+        maxLengthPixels != null ? maxLengthPixels! : _thumbnailViewerW,
+        _thumbnailViewerH,
+      );
+
+      _startFraction = 0;
+      _endFraction = 1;
+
+      _videoStartPos = 0;
+      _videoEndPos = fraction != null
+          ? _videoDuration.toDouble() * fraction!
+          : _videoDuration.toDouble();
+
+      widget.onChangeStart!(_videoStartPos);
+      widget.onChangeEnd!(_videoEndPos);
+
+      // Defining the tween points
+      _linearTween
+        ..begin = _startPos.dx
+        ..end = _endPos.dx;
+      _animationController!.duration =
+          Duration(milliseconds: (_videoEndPos - _videoStartPos).toInt());
+      _animationController!.reset();
+
+      videoPlayerController
+          .seekTo(Duration(milliseconds: _videoStartPos.toInt()));
+    });
+  }
+
   /// Called when the user starts dragging the frame, on either side on the whole frame.
   /// Determine which [EditorDragType] is used.
   void _onDragStart(DragStartDetails details) {
@@ -561,6 +601,7 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
 
   @override
   void dispose() {
+    widget.trimmer.onReset = null;
     videoPlayerController.pause();
     _scrollController.dispose();
     _scrollStartTimer?.cancel();
