@@ -184,7 +184,7 @@ class _FixedTrimViewerState extends State<FixedTrimViewer>
   @override
   void initState() {
     super.initState();
-    widget.trimmer.onReset = reset;
+    widget.trimmer.addResetCallback(reset);
     _startCircleSize = widget.editorProperties.circleSize;
     _endCircleSize = widget.editorProperties.circleSize;
     _borderRadius = widget.editorProperties.borderRadius;
@@ -261,6 +261,16 @@ class _FixedTrimViewerState extends State<FixedTrimViewer>
     });
   }
 
+  @override
+  void didUpdateWidget(covariant FixedTrimViewer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.trimmer != widget.trimmer) {
+      oldWidget.trimmer.removeResetCallback(reset);
+      widget.trimmer.addResetCallback(reset);
+    }
+  }
+
   Future<void> _initializeVideoController() async {
     if (_videoFile != null) {
       videoPlayerController.addListener(() {
@@ -303,7 +313,6 @@ class _FixedTrimViewerState extends State<FixedTrimViewer>
   }
 
   void reset() {
-    videoPlayerController.seekTo(const Duration(milliseconds: 0));
     setState(() {
       _startCircleSize = widget.editorProperties.circleSize;
       _endCircleSize = widget.editorProperties.circleSize;
@@ -315,9 +324,9 @@ class _FixedTrimViewerState extends State<FixedTrimViewer>
       );
 
       _startFraction = 0;
-      _endFraction = 1;
+      _endFraction = fraction ?? 1;
 
-      _videoStartPos = _videoStartPos;
+      _videoStartPos = 0;
       _videoEndPos = fraction != null
           ? _videoDuration.toDouble() * fraction!
           : _videoDuration.toDouble();
@@ -445,7 +454,7 @@ class _FixedTrimViewerState extends State<FixedTrimViewer>
 
   @override
   void dispose() {
-    widget.trimmer.onReset = null;
+    widget.trimmer.removeResetCallback(reset);
     videoPlayerController.pause();
     widget.onChangePlaybackState!(false);
     if (_videoFile != null) {

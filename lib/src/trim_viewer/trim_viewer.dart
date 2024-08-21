@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
@@ -193,10 +195,26 @@ class TrimViewer extends StatefulWidget {
 class _TrimViewerState extends State<TrimViewer> with TickerProviderStateMixin {
   bool? _isScrollableAllowed;
 
+  StreamSubscription<TrimmerEvent>? _trimmerEventSubscription;
+
   @override
   void initState() {
     super.initState();
-    widget.trimmer.eventStream.listen((event) {
+    _listenTrimmerEvents();
+  }
+
+  @override
+  void didUpdateWidget(covariant TrimViewer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.trimmer != widget.trimmer) {
+      _trimmerEventSubscription?.cancel();
+      _listenTrimmerEvents();
+    }
+  }
+
+  void _listenTrimmerEvents() {
+    _trimmerEventSubscription = widget.trimmer.eventStream.listen((event) {
       if (event == TrimmerEvent.initialized) {
         final totalDuration =
             widget.trimmer.videoPlayerController!.value.duration;
@@ -274,5 +292,12 @@ class _TrimViewerState extends State<TrimViewer> with TickerProviderStateMixin {
                 : _isScrollableAllowed == true
                     ? scrollableViewer
                     : fixedTrimViewer;
+  }
+
+  @override
+  void dispose() {
+    _trimmerEventSubscription?.cancel();
+
+    super.dispose();
   }
 }
