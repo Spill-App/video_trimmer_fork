@@ -26,9 +26,7 @@ class Trimmer {
   final StreamController<TrimmerEvent> _controller =
       StreamController<TrimmerEvent>.broadcast();
 
-  VoidCallback? _onReset;
-
-  set onReset(VoidCallback? value) => _onReset = value;
+  final List<VoidCallback> _resetCallbacks = [];
 
   VideoPlayerController? _videoPlayerController;
 
@@ -303,13 +301,23 @@ class Trimmer {
     }
   }
 
+  void addResetCallback(VoidCallback callback) {
+    _resetCallbacks.add(callback);
+  }
+
+  void removeResetCallback(VoidCallback callback) {
+    _resetCallbacks.remove(callback);
+  }
+
   void reset() {
-    _onReset?.call();
+    for (final resetCallback in _resetCallbacks) {
+      resetCallback();
+    }
   }
 
   /// Clean up
   void dispose() {
-    _onReset = null;
+    _resetCallbacks.clear();
     _controller.close();
   }
 }

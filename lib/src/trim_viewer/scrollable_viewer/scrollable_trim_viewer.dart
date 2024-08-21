@@ -282,7 +282,7 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
   @override
   void initState() {
     super.initState();
-    widget.trimmer.onReset = reset;
+    widget.trimmer.addResetCallback(reset);
     _scrollController = ScrollController();
     _startCircleSize = widget.editorProperties.circleSize;
     _endCircleSize = widget.editorProperties.circleSize;
@@ -431,7 +431,6 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
   }
 
   void reset() {
-    videoPlayerController.seekTo(const Duration(milliseconds: 0));
     setState(() {
       _scrollStartTimer?.cancel();
       _scrollingTimer?.cancel();
@@ -446,7 +445,7 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
       );
 
       _startFraction = 0;
-      _endFraction = 1;
+      _endFraction = fraction ?? 1;
 
       _videoStartPos = 0;
       _videoEndPos = fraction != null
@@ -467,6 +466,16 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
       videoPlayerController
           .seekTo(Duration(milliseconds: _videoStartPos.toInt()));
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant ScrollableTrimViewer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.trimmer != widget.trimmer) {
+      oldWidget.trimmer.removeResetCallback(reset);
+      widget.trimmer.addResetCallback(reset);
+    }
   }
 
   /// Called when the user starts dragging the frame, on either side on the whole frame.
@@ -601,7 +610,7 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
 
   @override
   void dispose() {
-    widget.trimmer.onReset = null;
+    widget.trimmer.removeResetCallback(reset);
     videoPlayerController.pause();
     _scrollController.dispose();
     _scrollStartTimer?.cancel();

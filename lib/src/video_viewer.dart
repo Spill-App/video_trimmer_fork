@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -48,6 +50,8 @@ class VideoViewer extends StatefulWidget {
 }
 
 class _VideoViewerState extends State<VideoViewer> {
+  StreamSubscription<TrimmerEvent>? _trimmerEventSubscription;
+
   /// Quick access to VideoPlayerController, only not null after [TrimmerEvent.initialized]
   /// has been emitted.
   VideoPlayerController? get videoPlayerController =>
@@ -55,13 +59,28 @@ class _VideoViewerState extends State<VideoViewer> {
 
   @override
   void initState() {
-    widget.trimmer.eventStream.listen((event) {
+    super.initState();
+
+    _listenTrimmerEvents();
+  }
+
+  @override
+  void didUpdateWidget(covariant VideoViewer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.trimmer != widget.trimmer) {
+      _trimmerEventSubscription?.cancel();
+      _listenTrimmerEvents();
+    }
+  }
+
+  void _listenTrimmerEvents() {
+    _trimmerEventSubscription = widget.trimmer.eventStream.listen((event) {
       if (event == TrimmerEvent.initialized) {
         //The video has been initialized, now we can load stuff
         setState(() {});
       }
     });
-    super.initState();
   }
 
   @override
@@ -96,7 +115,8 @@ class _VideoViewerState extends State<VideoViewer> {
 
   @override
   void dispose() {
-    widget.trimmer.dispose();
+    _trimmerEventSubscription?.cancel();
+
     super.dispose();
   }
 }
