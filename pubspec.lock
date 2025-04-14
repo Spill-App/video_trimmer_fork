@@ -45,11 +45,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "flutter-upgrade/remove-v1-embedding"
-      resolved-ref: e4720b265aa94ac971bc012580b9ca51557484d1
-      url: "https://github.com/Spill-App/ffmpeg_kit_flutter_full_gpl.git"
+      ref: main
+      resolved-ref: "06d4cb37152326d6eed351c451ae6a98eb817f3d"
+      url: "https://github.com/Spill-App/ffmpeg_kit_flutter.git"
     source: git
-    version: "5.1.0-LTS"
+    version: "6.0.3"
   ffmpeg_kit_flutter_platform_interface:
     dependency: transitive
     description:
