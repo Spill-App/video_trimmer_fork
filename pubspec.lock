@@ -45,8 +45,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: main
-      resolved-ref: "06d4cb37152326d6eed351c451ae6a98eb817f3d"
+      ref: "908251be13edc4aac74fb5669615f366b13b6ccf"
+      resolved-ref: "908251be13edc4aac74fb5669615f366b13b6ccf"
       url: "https://github.com/Spill-App/ffmpeg_kit_flutter.git"
     source: git
     version: "6.0.3"
