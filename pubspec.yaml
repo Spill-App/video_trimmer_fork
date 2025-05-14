@@ -15,7 +15,7 @@ dependencies:
   ffmpeg_kit_flutter_full_gpl:
     git:
       url: https://github.com/Spill-App/ffmpeg_kit_flutter.git
-      ref: 7251943bff9c3857571f3bdd0b779b88588fb0d4
+      ref: 4f1dc79a48d03ec579d9827c421c184bf783b832
   video_thumbnail:
     git:
       url: https://github.com/Spill-App/video_thumbnail_fork.git
