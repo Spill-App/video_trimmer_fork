@@ -54,8 +54,7 @@ class _VideoViewerState extends State<VideoViewer> {
 
   /// Quick access to VideoPlayerController, only not null after [TrimmerEvent.initialized]
   /// has been emitted.
-  VideoPlayerController? get videoPlayerController =>
-      widget.trimmer.videoPlayerController;
+  VideoPlayerController? get videoPlayerController => widget.trimmer.videoPlayerController;
 
   @override
   void initState() {

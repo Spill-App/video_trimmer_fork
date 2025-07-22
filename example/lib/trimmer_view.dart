@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:example/preview.dart';
+import 'package:example/preview.dart' as example;
 import 'package:flutter/material.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
 class TrimmerView extends StatefulWidget {
   final File file;
 
-  const TrimmerView(this.file, {Key? key}) : super(key: key);
+  const TrimmerView(this.file, {super.key});
   @override
   State<TrimmerView> createState() => _TrimmerViewState();
 }
@@ -32,7 +32,7 @@ class _TrimmerViewState extends State<TrimmerView> {
     _trimmer.loadVideo(videoFile: widget.file);
   }
 
-  _saveVideo() {
+  void _saveVideo() {
     setState(() {
       _progressVisibility = true;
     });
@@ -41,13 +41,12 @@ class _TrimmerViewState extends State<TrimmerView> {
       startValue: _startValue,
       endValue: _endValue,
       onSave: (outputPath) {
-        setState(() {
-          _progressVisibility = false;
-        });
+        setState(() => _progressVisibility = false);
         debugPrint('OUTPUT PATH: $outputPath');
-        Navigator.of(context).pushReplacement(
+        Navigator.pushReplacement(
+          context,
           MaterialPageRoute(
-            builder: (context) => Preview(outputPath),
+            builder: (_) => example.Preview(outputPath),
           ),
         );
       },
@@ -56,18 +55,12 @@ class _TrimmerViewState extends State<TrimmerView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (Navigator.of(context).userGestureInProgress) {
-          return false;
-        } else {
-          return true;
-        }
-      },
+    return PopScope(
+      canPop: !Navigator.of(context).userGestureInProgress,
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: const Text("Video Trimmer"),
+          title: const Text('Video Trimmer'),
         ),
         body: Center(
           child: Container(
@@ -84,7 +77,7 @@ class _TrimmerViewState extends State<TrimmerView> {
                 ),
                 ElevatedButton(
                   onPressed: _progressVisibility ? null : () => _saveVideo(),
-                  child: const Text("SAVE"),
+                  child: const Text('SAVE'),
                 ),
                 Expanded(
                   child: VideoViewer(trimmer: _trimmer),
@@ -105,12 +98,11 @@ class _TrimmerViewState extends State<TrimmerView> {
                         circlePaintColor: Colors.yellow.shade800,
                       ),
                       areaProperties: TrimAreaProperties.edgeBlur(
-                        thumbnailQuality: 10,
+                        thumbnailQuality: 50,
                       ),
                       onChangeStart: (value) => _startValue = value,
                       onChangeEnd: (value) => _endValue = value,
-                      onChangePlaybackState: (value) =>
-                          setState(() => _isPlaying = value),
+                      onChangePlaybackState: (value) => setState(() => _isPlaying = value),
                     ),
                   ),
                 ),
