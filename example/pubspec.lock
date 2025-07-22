@@ -44,10 +44,11 @@ packages:
   ffmpeg_kit_flutter_full_gpl:
     dependency: transitive
     description:
-      name: ffmpeg_kit_flutter_full_gpl
-      sha256: "4f269bcb636bfcb544e5b4d65c706a3d311839970cb42638e72406410c1b5b7b"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "649a82afac5f6cde6fe9feb73f0e589637c78679"
+      resolved-ref: "649a82afac5f6cde6fe9feb73f0e589637c78679"
+      url: "https://github.com/Spill-App/ffmpeg_kit_flutter.git"
+    source: git
     version: "6.0.3"
   ffmpeg_kit_flutter_platform_interface:
     dependency: transitive
@@ -82,10 +83,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_plugin_android_lifecycle
-      sha256: "5a1e6fb2c0561958d7e4c33574674bda7b77caaca7a33b758876956f2902eea3"
+      sha256: f948e346c12f8d5480d2825e03de228d0eb8c3a737e4cdaa122267b89c022b5e
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.27"
+    version: "2.0.28"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -151,10 +152,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "0ca7359dad67fd7063cb2892ab0c0737b2daafd807cf1acecd62374c8fae6c12"
+      sha256: d0d310befe2c8ab9e7f393288ccbb11b60c019c6b5afc21973eeee4dda2b35e9
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.16"
+    version: "2.2.17"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -252,10 +253,10 @@ packages:
     dependency: transitive
     description:
       name: video_player_android
-      sha256: ae7d4f1b41e3ac6d24dd9b9d5d6831b52d74a61bdd90a7a6262a33d8bb97c29a
+      sha256: "4a5135754a62dbc827a64a42ef1f8ed72c962e191c97e2d48744225c2b9ebb73"
       url: "https://pub.dev"
     source: hosted
-    version: "2.8.2"
+    version: "2.8.7"
   video_player_avfoundation:
     dependency: transitive
     description:
@@ -283,11 +284,12 @@ packages:
   video_thumbnail:
     dependency: transitive
     description:
-      name: video_thumbnail
-      sha256: "3455c189d3f0bb4e3fc2236475aa84fe598b9b2d0e08f43b9761f5bc44210016"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.3"
+      path: "."
+      ref: b0eea86167f93d32375c4500861edecbd66cf80a
+      resolved-ref: b0eea86167f93d32375c4500861edecbd66cf80a
+      url: "https://github.com/Spill-App/video_thumbnail_fork.git"
+    source: git
+    version: "0.5.5"
   video_trimmer:
     dependency: "direct main"
     description:
@@ -307,10 +309,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: dc6ecaa00a7c708e5b4d10ee7bec8c270e9276dfcab1783f57e9962d7884305f
+      sha256: "66814138c3562338d05613a6e368ed8cfb237ad6d64a9e9334be3f309acfca03"
       url: "https://pub.dev"
     source: hosted
-    version: "5.12.0"
+    version: "5.14.0"
   xdg_directories:
     dependency: transitive
     description:
@@ -320,5 +322,5 @@ packages:
     source: hosted
     version: "1.1.0"
 sdks:
-  dart: ">=3.7.0 <4.0.0"
-  flutter: ">=3.27.0"
+  dart: ">=3.8.0 <4.0.0"
+  flutter: ">=3.29.0"
