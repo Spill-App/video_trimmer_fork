@@ -3,13 +3,13 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 import 'package:flutter_native_video_trimmer/flutter_native_video_trimmer.dart';
-import 'package:get_thumbnail_video/index.dart';
-import 'package:get_thumbnail_video/video_thumbnail.dart';
+
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:video_trimmer/src/utils/storage_dir.dart';
 
 enum OutputType { video, gif }

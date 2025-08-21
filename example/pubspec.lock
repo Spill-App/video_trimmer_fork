@@ -332,11 +332,11 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: b0eea86167f93d32375c4500861edecbd66cf80a
-      resolved-ref: b0eea86167f93d32375c4500861edecbd66cf80a
+      ref: "0a72866426245159e94a041e05e3062dcd851657"
+      resolved-ref: "0a72866426245159e94a041e05e3062dcd851657"
       url: "https://github.com/Spill-App/video_thumbnail_fork.git"
     source: git
-    version: "0.5.5"
+    version: "0.5.6"
   video_trimmer:
     dependency: "direct main"
     description:
