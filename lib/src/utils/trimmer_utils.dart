@@ -82,8 +82,7 @@ Stream<List<Uint8List?>> generateThumbnail({
 
       // Calculate the timestamp for the thumbnail in milliseconds
       final timestamp = (eachPart * i).toInt();
-      final formattedTimestamp =
-          _formatDuration(Duration(milliseconds: timestamp));
+      final formattedTimestamp = _formatDuration(Duration(milliseconds: timestamp));
 
       // Generate the thumbnail image bytes
       bytes = await VideoThumbnail.thumbnailData(
