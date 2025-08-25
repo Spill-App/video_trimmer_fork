@@ -14,7 +14,7 @@ dependencies:
   video_thumbnail:
     git:
       url: https://github.com/Spill-App/video_thumbnail_fork.git
-      ref: 0a72866426245159e94a041e05e3062dcd851657
+      ref: 645cef4743703bde1ccfe8dcd3f3be1607a5ecaa
   flutter_native_video_trimmer: ^1.1.9
   path_provider: ^2.1.5
   intl: ^0.19.0
