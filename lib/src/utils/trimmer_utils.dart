@@ -2,8 +2,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:get_thumbnail_video/index.dart';
-import 'package:get_thumbnail_video/video_thumbnail.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 /// Formats a [Duration] object to a human-readable string.
 ///
@@ -29,6 +28,7 @@ String _formatDuration(Duration duration) {
 /// - `videoPath` (required): The path to the video file.
 /// - `videoDuration` (required): The duration of the video in milliseconds.
 /// - `numberOfThumbnails` (required): The number of thumbnails to generate.
+/// - `thumbnailHeight` (required): The height of the thumbnails in pixels.
 /// - `quality` (required): The quality of the thumbnails (percentage).
 /// - `onThumbnailLoadingComplete` (required): A callback function that is
 ///   called when all thumbnails have been generated.
@@ -43,6 +43,7 @@ String _formatDuration(Duration duration) {
 ///   videoPath: 'path/to/video.mp4',
 ///   videoDuration: 60000, // 1 minute
 ///   numberOfThumbnails: 10,
+///   thumbnailHeight: 100,
 ///   quality: 50,
 ///   onThumbnailLoadingComplete: () {
 ///     print('Thumbnails generated successfully!');
@@ -69,6 +70,7 @@ Stream<List<Uint8List?>> generateThumbnail({
 
   log('Generating thumbnails for video: $videoPath');
   log('Total thumbnails to generate: $numberOfThumbnails');
+  log('Thumbnail height: ${thumbnailHeight.toInt()}px');
   log('Quality: $quality%');
   log('Generating thumbnails...');
   log('---------------------------------');
@@ -82,8 +84,7 @@ Stream<List<Uint8List?>> generateThumbnail({
 
       // Calculate the timestamp for the thumbnail in milliseconds
       final timestamp = (eachPart * i).toInt();
-      final formattedTimestamp =
-          _formatDuration(Duration(milliseconds: timestamp));
+      final formattedTimestamp = _formatDuration(Duration(milliseconds: timestamp));
 
       // Generate the thumbnail image bytes
       bytes = await VideoThumbnail.thumbnailData(
@@ -94,10 +95,15 @@ Stream<List<Uint8List?>> generateThumbnail({
         quality: quality,
       );
 
-      log('Timestamp: $formattedTimestamp | Size: ${(bytes.length / 1000).toStringAsFixed(2)} kB');
-      log('---------------------------------');
-
-      thumbnailBytes.add(bytes);
+      // Check if bytes were generated successfully
+      if (bytes != null) {
+        log('Timestamp: $formattedTimestamp | Size: ${(bytes.length / 1000).toStringAsFixed(2)} kB');
+        log('---------------------------------');
+        thumbnailBytes.add(bytes);
+      } else {
+        log('Failed to generate thumbnail at timestamp: $formattedTimestamp');
+        thumbnailBytes.add(null);
+      }
 
       if (thumbnailBytes.length == numberOfThumbnails) {
         onThumbnailLoadingComplete();
